@@ -13,8 +13,6 @@ bool IsGGExist(int hp)
 void Script()
 {
     OpenMultipleEffective('X', MAIN_UI_OR_FIGHT_UI);
-    SetGameSpeed(10);
-    SkipTick([=]() { return true; });
     SelectCards({COFFEE_BEAN, ICE_SHROOM, CHERRY_BOMB, BLOVER, PUMPKIN, GATLING_PEA, TWIN_SUNFLOWER, GLOOM_SHROOM, CATTAIL, WINTER_MELON});
     pao_operator.autoGetPaoList();
     plant_fixer.start(PUMPKIN, {{3, 9}, {4, 9}}, 1000);
