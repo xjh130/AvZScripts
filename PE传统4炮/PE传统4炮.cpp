@@ -10,7 +10,7 @@ int ReadyCOB()
 {
     int cob = 0;
     for (auto&& plant : alive_plant_filter) {
-        if (plant->type() == 47 && plant->state() == 37) {
+        if (plant.type() == 47 && plant.state() == 37) {
             cob = cob + 1;
         }
     }
@@ -20,8 +20,8 @@ int LeftmostGGabs(int row)
 {
     int result = 854;
     for (auto&& zombie : alive_zombie_filter) {
-        if (zombie->type() == 32 && zombie->row() == row - 1 && zombie->state() != 70) {
-            result = (zombie->abscissa() < result) ? zombie->abscissa() : result;
+        if (zombie.type() == 32 && zombie.row() == row - 1 && zombie.state() != 70) {
+            result = (zombie.abscissa() < result) ? zombie.abscissa() : result;
         }
     }
     return result;
@@ -46,7 +46,7 @@ void SmartBlover()
     auto blover = GetMainObject()->seedArray() + GetSeedIndex(BLOVER);
     if (blover->isUsable()) {
         for (auto&& zombie : alive_zombie_filter) {
-            if (zombie->type() == BALLOON_ZOMBIE && zombie->abscissa() < 10) {
+            if (zombie.type() == BALLOON_ZOMBIE && zombie.abscissa() < 10) {
                 CardNotInQueue(5, 2, 7);
                 break;
             }
@@ -90,7 +90,7 @@ void RemoveGloomShroom(int wave, int row, int col)
         auto gloom_shroom = GetMainObject()->seedArray() + GetSeedIndex(GLOOM_SHROOM);
         if (gloom_shroom->isUsable()) {
             for (auto&& plant : alive_plant_filter) {
-                if (plant->type() == 42 && plant->row() == row - 1 && plant->col() == col - 1 && plant->hp() <= 100) {
+                if (plant.type() == 42 && plant.row() == row - 1 && plant.col() == col - 1 && plant.hp() <= 100) {
                     ShovelNotInQueue(row, col);
                 }
             }
@@ -99,9 +99,6 @@ void RemoveGloomShroom(int wave, int row, int col)
 }
 void Script()
 {
-    // SetGameSpeed(2);
-    //  SkipTick([=]() { return true; });
-    SetErrorMode(NONE);
     OpenMultipleEffective('X', MAIN_UI_OR_FIGHT_UI);
     SelectCards({ICE_SHROOM, M_ICE_SHROOM, COFFEE_BEAN, DOOM_SHROOM, BLOVER, PUMPKIN, PUFF_SHROOM, LILY_PAD, GLOOM_SHROOM, FUME_SHROOM});
     plant_fixer.start(PUMPKIN, {{1, 1}, {2, 1}, {5, 1}, {6, 1}, {3, 6}, {3, 7}, {3, 8}, {3, 9}, {4, 6}, {4, 7}, {4, 8}, {4, 9}}, 2000);
@@ -120,14 +117,14 @@ void Script()
         for (auto wave : {9, 19, 20}) {
             InsertTimeOperation(1, wave, [=]() {
                 for (auto&& zombie : alive_zombie_filter) {
-                    if (zombie->type() == 32 && zombie->hp() > 2400 && (zombie->row() == 0 || zombie->row() == 5)) {
+                    if (zombie.type() == 32 && zombie.hp() > 2400 && (zombie.row() == 0 || zombie.row() == 5)) {
                         SetNowTime();
                         pao_operator.recoverPao({{2, 8.7}, {5, 8.7}});
                         break;
                     }
                 }
                 for (auto&& zombie : alive_zombie_filter) {
-                    if (zombie->type() == 32 && zombie->hp() > 4200 && (zombie->row() == 0 || zombie->row() == 5)) {
+                    if (zombie.type() == 32 && zombie.hp() > 4200 && (zombie.row() == 0 || zombie.row() == 5)) {
                         SetNowTime();
                         pao_operator.recoverPao({{2, 8.7}, {5, 8.7}});
                         break;
