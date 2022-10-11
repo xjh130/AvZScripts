@@ -2,9 +2,8 @@
 using namespace AvZ;
 bool IsGGExist(int hp)
 {
-    auto zombie = GetMainObject()->zombieArray();
-    for (int index = 0; index <= GetMainObject()->zombieTotal(); ++index) {
-        if (zombie[index].type() == GIGA_GARGANTUAR && zombie[index].isExist() && !zombie[index].isDead() && zombie[index].hp() > hp) {
+    for (auto&& zombie : alive_zombie_filter) {
+        if (zombie.type() == GIGA_GARGANTUAR && zombie.hp() > hp) {
             return true;
         }
     }
@@ -12,6 +11,8 @@ bool IsGGExist(int hp)
 }
 void Script()
 {
+    SetGameSpeed(10);
+    SkipTick([=]() { return true; });
     OpenMultipleEffective('X', MAIN_UI_OR_FIGHT_UI);
     SelectCards({COFFEE_BEAN, ICE_SHROOM, CHERRY_BOMB, BLOVER, PUMPKIN, GATLING_PEA, TWIN_SUNFLOWER, GLOOM_SHROOM, CATTAIL, WINTER_MELON});
     pao_operator.autoGetPaoList();
