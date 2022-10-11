@@ -310,8 +310,6 @@ void w10_PPSSDD_w20_PPSSDD()
 }
 void Script()
 {
-    SetGameSpeed(10);
-    SkipTick([=]() { return true; });
     OpenMultipleEffective('X', MAIN_UI_OR_FIGHT_UI);
     pao_operator.autoGetPaoList();
     ice_filler.start({{4, 9}, {3, 9}});
