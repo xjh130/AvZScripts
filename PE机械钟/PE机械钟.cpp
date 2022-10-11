@@ -13,7 +13,7 @@ bool IsSafe(int row, int col)
         return false;
     }
     for (auto&& zombie : alive_zombie_filter) {
-        if ((zombie->type() == 32 || zombie->type() == 23) && zombie->row() == row - 1 && zombie->abscissa() <= 80 * (col + 1) && zombie->slowCountdown() == 0) {
+        if ((zombie.type() == 32 || zombie.type() == 23) && zombie.row() == row - 1 && zombie.abscissa() <= 80 * (col + 1) && zombie.slowCountdown() == 0) {
             return false;
         }
     }
@@ -22,7 +22,7 @@ bool IsSafe(int row, int col)
 bool IsPlantExist(int type, int row, int col)
 {
     for (auto&& plant : alive_plant_filter) {
-        if (plant->type() == type && plant->row() == row - 1 && plant->col() == col - 1) {
+        if (plant.type() == type && plant.row() == row - 1 && plant.col() == col - 1) {
             return true;
         }
     }
@@ -32,13 +32,13 @@ int LeftmostGigaGargantuarAbs(int row, int hp = 0, bool IsNotHammering = false)
 {
     int result = 854;
     for (auto&& zombie : alive_zombie_filter) {
-        if (zombie->type() == 32 && zombie->row() == row - 1 && zombie->hp() >= hp) {
+        if (zombie.type() == 32 && zombie.row() == row - 1 && zombie.hp() >= hp) {
             if (IsNotHammering) {
-                if (zombie->state() != 70) {
-                    result = (zombie->abscissa() < result) ? zombie->abscissa() : result;
+                if (zombie.state() != 70) {
+                    result = (zombie.abscissa() < result) ? zombie.abscissa() : result;
                 }
             } else {
-                result = (zombie->abscissa() < result) ? zombie->abscissa() : result;
+                result = (zombie.abscissa() < result) ? zombie.abscissa() : result;
             }
         }
     }
@@ -198,8 +198,10 @@ void Script()
         AA(2300, 20);
     } else {
         SelectCards({ICE_SHROOM, M_ICE_SHROOM, COFFEE_BEAN, DOOM_SHROOM, CHERRY_BOMB, JALAPENO, GLOOM_SHROOM, PUMPKIN, LILY_PAD, FUME_SHROOM});
-        gloom_shroom_fixer.pushFunc([]() {
-            FixGloomShroom({{3, 9}, {4, 9}, {3, 8}, {4, 8}, {3, 7}, {4, 7}, {2, 6}, {5, 6}});
+        InsertTimeOperation(1, 3, [=]() {
+            gloom_shroom_fixer.pushFunc([]() {
+                FixGloomShroom({{3, 9}, {4, 9}, {3, 8}, {4, 8}, {3, 7}, {4, 7}, {2, 6}, {5, 6}});
+            });
         });
         for (auto wave : {10, 20}) {
             SetTime(-654, wave);
@@ -226,8 +228,8 @@ void Script()
             auto gloom_shroom = GetMainObject()->seedArray() + GetSeedIndex(GLOOM_SHROOM);
             if (gloom_shroom->isUsable()) {
                 for (auto&& plant : alive_plant_filter) {
-                    if (plant->type() == 42 && (plant->row() == 1 || plant->row() == 4) && plant->col() == 5 && plant->hp() <= 100) {
-                        ShovelNotInQueue(plant->row() + 1, 6);
+                    if (plant.type() == 42 && (plant.row() == 1 || plant.row() == 4) && plant.col() == 5 && plant.hp() <= 100) {
+                        ShovelNotInQueue(plant.row() + 1, 6);
                         break;
                     }
                 }
