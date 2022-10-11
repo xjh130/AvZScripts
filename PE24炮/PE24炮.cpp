@@ -10,7 +10,7 @@ void CountGG()
     for (int wave = 1; wave < 20; ++wave) {
         InsertTimeOperation(1, wave, [=]() {
             for (auto&& zombie : alive_zombie_filter) {
-                if (zombie->type() == 32 && zombie->abscissa() > 840) {
+                if (zombie.type() == 32 && zombie.abscissa() > 840) {
                     GGnum = GGnum + 1;
                 }
             }
@@ -21,7 +21,7 @@ int ReadyCOB()
 {
     int cob = 0;
     for (auto&& plant : alive_plant_filter) {
-        if (plant->type() == 47 && plant->state() == 37) {
+        if (plant.type() == 47 && plant.state() == 37) {
             cob = cob + 1;
         }
     }
@@ -310,6 +310,8 @@ void w10_PPSSDD_w20_PPSSDD()
 }
 void Script()
 {
+    SetGameSpeed(10);
+    SkipTick([=]() { return true; });
     OpenMultipleEffective('X', MAIN_UI_OR_FIGHT_UI);
     pao_operator.autoGetPaoList();
     ice_filler.start({{4, 9}, {3, 9}});
