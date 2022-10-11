@@ -1,16 +1,6 @@
 #include "avz.h"
 using namespace AvZ;
 TickRunner fix_cannon;
-bool IsGGExist()
-{
-    auto zombie = GetMainObject()->zombieArray();
-    for (int index = 0; index < GetMainObject()->zombieTotal(); ++index) {
-        if (zombie[index].type() == GIGA_GARGANTUAR && !zombie[index].isDead() && !zombie[index].isDisappeared()) {
-            return true;
-        }
-    }
-    return false;
-}
 void PlantCANNON(int row, int col)
 {
     auto kernel_pult = GetMainObject()->seedArray() + GetSeedIndex(KERNEL_PULT);
@@ -26,10 +16,9 @@ void FixCANNON()
 {
     auto cannon = GetMainObject()->seedArray() + GetSeedIndex(COB_CANNON);
     if (cannon->isUsable() || cannon->cd() >= 4250) {
-        auto plant = GetMainObject()->plantArray();
-        for (int index = 0; index < GetMainObject()->plantTotal(); index++) {
-            if (plant[index].type() == COB_CANNON && plant[index].hp() < 100 && !plant[index].isDisappeared() && plant[index].stateCountdown() == 2500) {
-                ShovelNotInQueue(plant[index].row() + 1, plant[index].col() + 1);
+        for (auto&& plant : alive_plant_filter) {
+            if (plant.type() == COB_CANNON && plant.hp() < 100 && plant.stateCountdown() == 2500) {
+                ShovelNotInQueue(plant.row() + 1, plant.col() + 1);
             }
         }
     }
@@ -74,7 +63,7 @@ void Script()
             }
         });
         InsertTimeOperation(501, 20, [=]() {
-            if (IsGGExist()) {
+            if (IsZombieExist(32)) {
                 SetTime(501, 20);
                 pao_operator.recoverPao({{2, 9}, {5, 9}});
             }
@@ -101,36 +90,34 @@ void Script()
         pao_operator.pao(2, 9);
     }
     InsertTimeOperation(413, 9, [=]() {
-        if (GetMainObject()->refreshCountdown() > 200 || IsGGExist()) {
+        if (GetMainObject()->refreshCountdown() > 200 || IsZombieExist(32)) {
             SetTime(413, 9);
             pao_operator.pao(5, 9);
-            auto zombie = GetMainObject()->zombieArray();
-            for (int index = 0; index < GetMainObject()->zombieTotal(); index++) {
-                if ((zombie[index].row() == 0 || zombie[index].row() == 1 || zombie[index].row() == 2) && !zombie[index].isDead() && !zombie[index].isDisappeared() && zombie[index].type() != IMP) {
+            for (auto&& zombie : alive_zombie_filter) {
+                if ((zombie.row() == 0 || zombie.row() == 1 || zombie.row() == 2) && zombie.type() != IMP) {
                     SetTime(546, 9);
                     pao_operator.pao(2, 9);
                     break;
                 }
             }
-            if (IsGGExist()) {
+            if (IsZombieExist(32)) {
                 SetTime(628, 9);
                 pao_operator.pao(5, 9);
             }
         }
     });
     InsertTimeOperation(413, 19, [=]() {
-        if (GetMainObject()->refreshCountdown() > 200 || IsGGExist()) {
+        if (GetMainObject()->refreshCountdown() > 200 || IsZombieExist(32)) {
             SetTime(413, 19);
             pao_operator.pao(2, 9);
-            auto zombie = GetMainObject()->zombieArray();
-            for (int index = 0; index < GetMainObject()->zombieTotal(); index++) {
-                if ((zombie[index].row() == 3 || zombie[index].row() == 4 || zombie[index].row() == 5) && !zombie[index].isDead() && !zombie[index].isDisappeared() && zombie[index].type() != IMP) {
+            for (auto&& zombie : alive_zombie_filter) {
+                if ((zombie.row() == 3 || zombie.row() == 4 || zombie.row() == 5) && zombie.type() != IMP) {
                     SetTime(546, 19);
                     pao_operator.pao(5, 9);
                     break;
                 }
             }
-            if (IsGGExist()) {
+            if (IsZombieExist(32)) {
                 SetTime(628, 19);
                 pao_operator.pao(2, 9);
             }
@@ -138,13 +125,13 @@ void Script()
     });
     for (auto wave : {9, 19}) {
         InsertTimeOperation(1016, wave, [=]() {
-            if (IsGGExist()) {
+            if (IsZombieExist(32)) {
                 SetTime(1016, wave);
                 pao_operator.pao({{2, 9}, {5, 9}});
             }
         });
         InsertTimeOperation(1617, wave, [=]() {
-            if (IsGGExist() && GetMainObject()->wave() == wave) {
+            if (IsZombieExist(32) && GetMainObject()->wave() == wave) {
                 SetTime(1617, wave);
                 pao_operator.pao({{2, 9}, {5, 9}});
             }
