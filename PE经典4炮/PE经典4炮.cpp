@@ -7,7 +7,7 @@ TickRunner gloom_shroom_fixer;
 bool IsPlantExist(int type, int row, int col)
 {
     for (auto&& plant : alive_plant_filter) {
-        if (plant->type() == type && plant->row() == row - 1 && plant->col() == col - 1) {
+        if (plant.type() == type && plant.row() == row - 1 && plant.col() == col - 1) {
             return true;
         }
     }
@@ -23,17 +23,17 @@ void SmartCardNotInQueue(int type, int row, int col, bool IsImitater = false)
 void SmartC()
 {
     for (auto&& zombie : alive_zombie_filter) {
-        if (zombie->type() == 3 && zombie->abscissa() <= 600 && GetPlantIndex(zombie->row() + 1, 6) >= 0) {
-            ShovelNotInQueue(zombie->row() + 1, 6);
+        if (zombie.type() == 3 && zombie.abscissa() <= 600 && GetPlantIndex(zombie.row() + 1, 6) >= 0) {
+            ShovelNotInQueue(zombie.row() + 1, 6);
             break;
         }
     }
     for (auto&& zombie : alive_zombie_filter) {
-        if ((zombie->type() == GIGA_GARGANTUAR || zombie->type() == GARGANTUAR) && zombie->abscissa() <= 520 && !zombie->isHammering()) {
-            if (GetPlantIndex(zombie->row() + 1, 6) == -1) {
-                SmartCardNotInQueue(PUFF_SHROOM, zombie->row() + 1, 6);
-                if (zombie->hp() >= 200) {
-                    SmartCardNotInQueue(SCAREDY_SHROOM, zombie->row() + 1, 6);
+        if ((zombie.type() == GIGA_GARGANTUAR || zombie.type() == GARGANTUAR) && zombie.abscissa() <= 520 && !zombie.isHammering()) {
+            if (GetPlantIndex(zombie.row() + 1, 6) == -1) {
+                SmartCardNotInQueue(PUFF_SHROOM, zombie.row() + 1, 6);
+                if (zombie.hp() >= 200) {
+                    SmartCardNotInQueue(SCAREDY_SHROOM, zombie.row() + 1, 6);
                 }
                 break;
             }
@@ -43,7 +43,7 @@ void SmartC()
 void SmartBlover()
 {
     for (auto&& zombie : alive_zombie_filter) {
-        if (zombie->type() == BALLOON_ZOMBIE && zombie->abscissa() <= 200) {
+        if (zombie.type() == BALLOON_ZOMBIE && zombie.abscissa() <= 200) {
             SmartCardNotInQueue(BLOVER, 1, 1);
             break;
         }
@@ -69,6 +69,7 @@ void FixGloomShroom(const std::vector<Position>& lst)
 void Script()
 {
     OpenMultipleEffective('X', MAIN_UI_OR_FIGHT_UI);
+    SetGameSpeed(10);
     plant_fixer.start(PUMPKIN, {{3, 5}, {3, 6}, {4, 5}, {4, 6}, {6, 4}, {1, 4}}, 2000);
     pao_operator.resetPaoList({{3, 1}, {4, 1}, {3, 3}, {4, 3}});
     ice_filler.start({{3, 5}, {6, 4}, {1, 4}, {1, 5}, {6, 5}});
@@ -170,10 +171,10 @@ void Script()
         ice_filler.resetFillList({{3, 5}, {6, 4}, {1, 4}, {1, 5}, {6, 5}});
         InsertTimeOperation(1, wave, [=]() {
             for (auto&& zombie : alive_zombie_filter) {
-                if ((zombie->type() == GIGA_GARGANTUAR || zombie->type() == GARGANTUAR) && zombie->abscissa() > 840) {
+                if ((zombie.type() == GIGA_GARGANTUAR || zombie.type() == GARGANTUAR) && zombie.abscissa() > 840) {
                     InsertTimeOperation(2920, wave, [=]() {
                         for (auto&& zombie : alive_zombie_filter) {
-                            if (zombie->type() == GIGA_GARGANTUAR && zombie->hp() > 1200) {
+                            if (zombie.type() == GIGA_GARGANTUAR && zombie.hp() > 1200) {
                                 SetNowTime();
                                 pao_operator.pao({{2, 8}, {5, 8}});
                                 break;
