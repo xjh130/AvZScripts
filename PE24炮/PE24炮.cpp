@@ -1,5 +1,4 @@
 #include "avz.h"
-#include "avz_xjh.h"
 using namespace AvZ;
 int GGnum = 1437;
 struct I {
@@ -17,6 +16,16 @@ void CountGG()
             }
         });
     }
+}
+int ReadyCOB()
+{
+    int cob = 0;
+    for (auto&& plant : alive_plant_filter) {
+        if (plant->type() == 47 && plant->state() == 37) {
+            cob = cob + 1;
+        }
+    }
+    return cob;
 }
 void SmartCNotInQueue(int row)
 {
