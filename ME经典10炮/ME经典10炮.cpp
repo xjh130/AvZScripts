@@ -6,7 +6,7 @@ TickRunner smart_c;
 bool IsGGExist()
 {
     for (auto&& zombie : alive_zombie_filter) {
-        if (zombie->type() == GIGA_GARGANTUAR && zombie->hp() > 600) {
+        if (zombie.type() == GIGA_GARGANTUAR && zombie.hp() > 600) {
             return true;
         }
     }
@@ -14,14 +14,15 @@ bool IsGGExist()
 }
 void SmartC()
 {
-    auto zombie = GetMainObject()->zombieArray();
     auto seed = GetMainObject()->seedArray();
-    if (seed[0].isUsable())
-        for (int index = 0; index < GetMainObject()->zombieTotal(); index++)
-            if (zombie[index].type() == GIGA_GARGANTUAR && !zombie[index].isDead() && !zombie[index].isDisappeared() && zombie[index].abscissa() < 650) {
-                CardNotInQueue(1, zombie[index].row() + 1, 8);
+    if (seed[0].isUsable()) {
+        for (auto&& zombie : alive_zombie_filter) {
+            if (zombie.type() == GIGA_GARGANTUAR && zombie.abscissa() < 650) {
+                CardNotInQueue(1, zombie.row() + 1, 8);
                 break;
             }
+        }
+    }
 }
 void Script()
 {
@@ -74,11 +75,10 @@ void Script()
     SetTime(-150, 20);
     Card({{FLOWER_POT, 3, 8}, {ICE_SHROOM, 3, 8}});
     InsertTimeOperation(0, 4, [=]() {
-        auto plant = GetMainObject()->plantArray();
-        for (int index = 0; index < GetMainObject()->plantTotal(); index++) {
-            if (plant[index].type() == COB_CANNON && plant[index].hp() < 201 && plant[index].stateCountdown() > 1300 && !plant[index].isDisappeared()) {
-                int row = plant[index].row() + 1;
-                int col = plant[index].col() + 1;
+        for (auto&& plant : alive_plant_filter) {
+            if (plant.type() == COB_CANNON && plant.hp() < 201 && plant.stateCountdown() > 1300) {
+                int row = plant.row() + 1;
+                int col = plant.col() + 1;
                 ShovelNotInQueue(row, col);
                 CardNotInQueue(4, row, col);
                 SetTime(751, 4);
