@@ -85,7 +85,6 @@ void PPDD_J(int wave)
     SetTime(93, wave);
     pao_operator.pao({{1, 7.8}, {5, 7.8}});
 }
-
 void PPDD(int wave)
 {
     SetTime(-55, wave);
