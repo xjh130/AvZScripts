@@ -164,9 +164,6 @@ void FixGloomShroom(const std::vector<Position>& lst)
 }
 void Script()
 {
-    SetGameSpeed(10);
-    SkipTick([=]() { return true; });
-    SetErrorMode(NONE);
     OpenMultipleEffective('X', MAIN_UI_OR_FIGHT_UI);
     auto zombie_type = GetMainObject()->zombieTypeList();
     pumpkin_fixer.start(PUMPKIN, {{3, 9}, {3, 8}, {4, 9}, {4, 8}, {1, 1}, {1, 4}, {2, 1}, {2, 2}, {2, 4}, {3, 6}, {3, 7}, {4, 6}, {4, 7}, {5, 1}, {5, 4}, {6, 1}, {6, 4}, {2, 3}}, 2000);
